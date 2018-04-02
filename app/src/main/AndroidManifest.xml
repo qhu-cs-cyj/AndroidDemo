@@ -16,7 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="com.example.serviceDemo.MyBindService"></service>
+        <service
+            android:name="com.example.serviceDemo.MyBindService"
+            android:process=""></service>
         <service android:name="com.example.serviceDemo.MyStartService"></service>
     </application>
 
