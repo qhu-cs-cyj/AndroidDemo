@@ -43,7 +43,7 @@ public class HandlerActivity extends Activity {
                 while(i<100){
                     Message m = Message.obtain();
                     m.what = 1;
-                    m.arg1 = 1;
+                    m.arg1 = i;
                     handler.sendMessage(m);
 
                     i++;
@@ -55,5 +55,28 @@ public class HandlerActivity extends Activity {
                 }
             }
         }).start();
+
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser){
+                    i = progress;
+                    Message m = Message.obtain();
+                    m.what = 1;
+                    m.arg1 = i;
+                    handler.sendMessage(m);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 }

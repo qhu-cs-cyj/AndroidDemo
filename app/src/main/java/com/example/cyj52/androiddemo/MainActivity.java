@@ -10,70 +10,55 @@ import android.os.IBinder;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.processthread.HandlerActivity;
 import com.example.serviceDemo.MyBindService;
 import com.example.serviceDemo.MyStartService;
+import com.example.serviceDemo.ServiceActivity;
+import com.example.webview.WebViewActivity;
 
 public class MainActivity extends Activity {
 
-    Button b1,b2,b3,b4;
+    Button btnservice,btnhandle,btnwebview;
     Intent in;
-    MyBindService myservice;
-
-    private ServiceConnection sConn = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            myservice = ((MyBindService.LocalBinder)iBinder).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        b1 = (Button)findViewById(R.id.button);
-        b2 = (Button)findViewById(R.id.button2);
-        b3 = (Button)findViewById(R.id.button3);
-        b4 = (Button)findViewById(R.id.button4);
+        btnservice = (Button)findViewById(R.id.btnService);
+        btnhandle = (Button)findViewById(R.id.btnhandle);
+        btnwebview = (Button)findViewById(R.id.btnwebview);
 
-        final Intent bindIn = new Intent(MainActivity.this,MyBindService.class);
-        bindService(bindIn,sConn, Context.BIND_AUTO_CREATE);
-
-        b1.setOnClickListener(new View.OnClickListener() {
+        btnservice.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                in = new Intent(MainActivity.this, MyStartService.class);
-                startService(in);
-            }
-        });
-
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                stopService(in);
-            }
-        });
-
-        b3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent in = new Intent();
-                in.setAction("MyService");
-                in.setPackage(getPackageName());
-                startService(in);
+                in.setClass(MainActivity.this,ServiceActivity.class);
+                startActivity(in);
+//                MainActivity.this.finish();
             }
         });
 
-        b4.setOnClickListener(new View.OnClickListener() {
+        btnhandle.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                myservice.test();
+            public void onClick(View v) {
+                Intent in = new Intent();
+                in.setClass(MainActivity.this,HandlerActivity.class);
+                startActivity(in);
+//                MainActivity.this.finish();
+            }
+        });
+
+        btnwebview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent();
+                in.setClass(MainActivity.this,WebViewActivity.class);
+                startActivity(in);
+//                MainActivity.this.finish();
             }
         });
     }
+
 }
