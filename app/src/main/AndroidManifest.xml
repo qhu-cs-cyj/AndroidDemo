@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.example.firstInApp.GuideActivity"></activity>
         <activity android:name="com.example.serviceDemo.ServiceActivity"></activity>
         <activity android:name="com.example.processthread.HandlerActivity"></activity>
         <activity android:name="com.example.webview.WebViewActivity"></activity>
