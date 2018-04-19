@@ -11,24 +11,26 @@ import com.example.cyj52.androiddemo.R;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
-import java.io.IOError;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class GetActivity extends Activity {
-    TextView gettv;
+public class PostActivity extends Activity {
+    TextView posttv;
     String urlString;
     private Handler handler= new Handler(){
 
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                case 1:
-                    gettv.setText(msg.obj.toString());
+                case 2:
+                    posttv.setText(msg.obj.toString());
                     break;
             }
         }
@@ -36,9 +38,9 @@ public class GetActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_get);
+        setContentView(R.layout.activity_post);
 
-        gettv = (TextView)findViewById(R.id.gettv);
+        posttv = (TextView)findViewById(R.id.posttv);
         urlString = "http://www.baidu.com";
         new Thread(new Runnable() {
             @Override
@@ -46,7 +48,21 @@ public class GetActivity extends Activity {
                 try{
                     URL url = new URL(urlString);
                     HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+                    connection.setDoInput(true);
+                    connection.setDoOutput(true);
+                    connection.setRequestMethod("POST");
+                    connection.setUseCaches(false);
                     connection.connect();
+
+                    OutputStream os = connection.getOutputStream();
+                    OutputStreamWriter ow = new OutputStreamWriter(os);
+                    BufferedWriter writer = new BufferedWriter(ow);
+                    writer.write("page=1");
+                    writer.flush();
+                    writer.close();
+                    ow.close();
+                    os.close();
+
                     InputStream is = connection.getInputStream();
                     InputStreamReader isreader = new InputStreamReader(is);
                     BufferedReader reader = new BufferedReader(isreader);
@@ -62,7 +78,7 @@ public class GetActivity extends Activity {
                     connection.disconnect();
 
                     Message m = new Message();
-                    m.what = 1;
+                    m.what = 2;
                     m.obj = sb;
                     handler.sendMessage(m);
                 }catch (MalformedURLException e){

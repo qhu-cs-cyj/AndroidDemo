@@ -23,8 +23,11 @@ import com.example.serviceDemo.MyStartService;
 import com.example.serviceDemo.ServiceActivity;
 import com.example.webview.WebViewActivity;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -72,7 +75,9 @@ public class MainActivity extends Activity {
 //        String value = properties.getProperty("isFirstIn");
 
 
-
+        manager  =new LocalActivityManager(this,true);
+        manager.dispatchCreate(savedInstanceState);
+        findView();
 
         btnservice = (Button)findViewById(R.id.btnService);
         btnhandle = (Button)findViewById(R.id.btnhandle);
@@ -109,4 +114,59 @@ public class MainActivity extends Activity {
         });
     }
 
+    private void findView(){
+        txtvs = new ArrayList<TextView>();
+        viewPager = (ViewPager)findViewById(R.id.viewpager);
+        viewPager.setOnPageChangeListener(this);
+        radioGroup = (RadioGroup)findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                for(int i = 0;i<group.getChildCount();i++){
+                    if(group.getChildAt(i).getId() == checkedId){
+                        viewPager.setCurrentItem(i);
+                        whilteLineVisibility(i);
+                        break;
+                    }
+                }
+            }
+        });
+
+        txtv_buttom1 = (TextView)findViewById(R.id.txtv_buttom1);
+        txtv_buttom2 = (TextView)findViewById(R.id.txtv_butto2);
+        txtv_buttom3 = (TextView)findViewById(R.id.txtv_buttom3);
+
+        txtvs.add(txtv_buttom1);
+        txtvs.add(txtv_buttom2);
+        txtvs.add(txtv_buttom3);
+        setPage();
+    }
+
+    private void whilteLineVisibility(int position){
+        for(int i=0;i<txtvs.size();i++){
+            if(i == position){
+                txtvs.get(i).setVisibility(View.VISIBLE);
+            }else{
+                txtvs.get(i).setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    private void setPage(){
+        views = new ArrayList<View>();
+        Intent in1 = new Intent(getApplicationContext(),FirstActivity.class);
+        views.add(getView("first",in1));
+        Intent in2 = new Intent(getApplicationContext(),FirstActivity.class);
+        views.add(getView("second",in2));
+        Intent in3 = new Intent(getApplicationContext(),FirstActivity.class);
+        views.add(getView("third",in3));
+
+        myNewAdapter = new MyNewAdapter(views);
+        viewPager.setAdapter(myNewAdapter);
+        viewPager.setCurrentItem(0);
+    }
+
+    private View getView(String id, Intent intent){
+        return manager.startActivity(id,intent).getDecorView();
+    }
 }
